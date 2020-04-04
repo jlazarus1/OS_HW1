@@ -37,8 +37,23 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 	} 
 	
 	/*************************************************/
-	else if (!strcmp(cmd, "pwd")) 
+	else if (!strcmp(cmd, "pwd"))
 	{
+		char *buf;
+		size_t size =0;
+		buf = (void*)malloc(size);
+
+			while (!getcwd(buf,size))
+			{
+				size = size+10;
+			}
+
+			printf(buf);
+			printf("\n");
+			free(buf);
+
+
+
 		
 	}
 	
@@ -113,7 +128,7 @@ void ExeExternal(char *args[MAX_ARG], char* cmdString)
 					your code
 					*/
 			
-			default:
+		//	default:
                 	// Add your code here
 					
 					/* 

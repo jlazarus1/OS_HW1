@@ -46,23 +46,26 @@ int main(int argc, char *argv[])
 			exit (-1); 
 	L_Fg_Cmd[0] = '\0';
 	
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
     	while (1)
     	{
 	 	printf("smash > ");
-		fgets(lineSize, MAX_LINE_SIZE, stdin);
-		strcpy(cmdString, lineSize);    	
+		fgets(lineSize, MAX_LINE_SIZE, stdin); // reads a line from the input stdin to lineSize
+		strcpy(cmdString, lineSize);    	// copies the line to cmdString
 		cmdString[strlen(lineSize)-1]='\0';
 					// perform a complicated Command
-		if(!ExeComp(lineSize)) continue; 
+		if(!ExeComp(lineSize)) continue;   // a function in commands.c executes a complicated command
 					// background command	
-	 	if(!BgCmd(lineSize, jobs)) continue; 
+	 	if(!BgCmd(lineSize, jobs)) continue; // a function in commands.c executes a background command.
 					// built in commands
-		ExeCmd(jobs, lineSize, cmdString);
+		ExeCmd(jobs, lineSize, cmdString);  // a function in commands.c executes and interprets a built in command
 		
 		/* initialize for next line read*/
 		lineSize[0]='\0';
 		cmdString[0]='\0';
 	}
+#pragma clang diagnostic pop
     return 0;
 }
 
