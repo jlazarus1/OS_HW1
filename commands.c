@@ -33,6 +33,18 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 /*************************************************/
 	if (!strcmp(cmd, "cd") ) 
 	{
+	    const char *path = args[1];
+
+	    if (path == "-")
+        {
+            chdir()
+            print()
+        }
+	    else if (chdir(path) < 0)
+        {
+            illegal_cmd = TRUE;
+            cmdString = path + " - path not found"
+        }
 		
 	} 
 	
@@ -89,6 +101,27 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
    		
 	} 
 	/*************************************************/
+    else if (!strcmp(cmd, "history"))
+    {
+
+    }
+    /*************************************************/
+    else if (!strcmp(cmd, "kill"))
+    {
+
+    }
+    /*************************************************/
+    else if (!strcmp(cmd, "cp"))
+    {
+
+    }
+    /*************************************************/
+    else if (!strcmp(cmd, "diff"))
+    {
+
+    }
+    /*************************************************/
+
 	else // external command
 	{
  		ExeExternal(args, cmdString);
