@@ -1,6 +1,11 @@
 //		commands.c
 //********************************************
 #include "commands.h"
+#include <iostream>
+#include <queue>
+
+
+
 //********************************************
 // function name: ExeCmd
 // Description: interperts and executes built-in commands
@@ -53,7 +58,7 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 	{
 		char *buf;
 		size_t size =0;
-		buf = (void*)malloc(size);
+		buf = static_cast<char *>((void *) malloc(size));
 
 			while (!getcwd(buf,size))
 			{
@@ -103,6 +108,8 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 	/*************************************************/
     else if (!strcmp(cmd, "history"))
     {
+
+
 
     }
     /*************************************************/
