@@ -10,6 +10,8 @@
 #include <sys/wait.h>
 #define MAX_LINE_SIZE 80
 #define MAX_ARG 20
+char *$OLDCWD;
+typedef enum { FALSE , TRUE } bool;
 #define MAX_HISTORY
 typedef enum { FALSE , TRUE } boolean;
 int ExeComp(char* lineSize);

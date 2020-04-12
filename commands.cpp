@@ -39,18 +39,30 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 	if (!strcmp(cmd, "cd") ) 
 	{
 	    const char *path = args[1];
+        char *tmp;
 
-	    if (path == "-")
+	    if (!strcmp(path, "-"))
         {
-            chdir()
-            print()
+            char *buf;
+            size_t size =0;
+            buf = (void*)malloc(size);
+
+            while (!getcwd(buf,size))
+            {
+                size = size+10;
+                free(buf)
+                buf = (void*)malloc(size);
+            }
+            chdir($OLDCWD);
+            free($OLDCWD);
+            $OLDCWD = buf;
         }
 	    else if (chdir(path) < 0)
         {
             illegal_cmd = TRUE;
             cmdString = path + " - path not found"
         }
-		
+
 	} 
 	
 	/*************************************************/
@@ -63,6 +75,8 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 			while (!getcwd(buf,size))
 			{
 				size = size+10;
+                free(buf)
+                buf = (void*)malloc(size);
 			}
 
 			printf(buf);
