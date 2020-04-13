@@ -3,6 +3,35 @@
 #include "commands.h"
 #include <iostream>
 #include <queue>
+#include <string.h>
+#include <stdio.h>
+char *OLDCWD;
+
+class history{
+    std::queue <char*> queue;
+    static history * inst;
+
+    history(){};
+public:
+    history(history const&)         = default;
+    void operator = (history const&) = delete;
+
+    static history * getinst() {
+        if(!inst)
+            inst = new history;
+        return  inst;
+
+    }
+
+
+    std::queue<char *> & getqueue() {
+        return queue;
+    }
+
+};
+
+history *history::inst = 0;
+extern history *test = test ->getinst();
 
 
 
@@ -14,8 +43,11 @@
 //**************************************************************************************
 int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 {
-	char* cmd; 
-	char* args[MAX_ARG];
+
+
+
+	char* cmd;
+	char*args[MAX_ARG];
 	char pwd[MAX_LINE_SIZE];
 	char* delimiters = " \t\n";  
 	int i = 0, num_arg = 0;
@@ -28,9 +60,21 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 	{
 		args[i] = strtok(NULL, delimiters); 
 		if (args[i] != NULL) 
-			num_arg++; 
- 
+			num_arg++;
+
 	}
+
+
+    if(test->getqueue().size() < MAX_HISTORY) {
+        char* tmp_str = strdup(lineSize);
+        test->getqueue().push(tmp_str);
+    }
+    else {
+        test->getqueue().pop();
+        char* tmp_str = strdup(lineSize);
+        test->getqueue().push(tmp_str);
+    }
+
 /*************************************************/
 // Built in Commands PLEASE NOTE NOT ALL REQUIRED
 // ARE IN THIS CHAIN OF IF COMMANDS. PLEASE ADD
@@ -40,28 +84,36 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 	{
 	    const char *path = args[1];
         char *tmp;
-
-	    if (!strcmp(path, "-"))
+        std::string hyph = "-";
+        const char* d = hyph.c_str();
+	    if (strcmp(path, d)==0)  // we should print and return the last path
         {
             char *buf;
             size_t size =0;
-            buf = (void*)malloc(size);
+            buf = static_cast<char *>((void *) malloc(size));
 
             while (!getcwd(buf,size))
             {
                 size = size+10;
-                free(buf)
-                buf = (void*)malloc(size);
+                free(buf);
+                buf = static_cast<char *>((void *) malloc(size));
             }
-            chdir($OLDCWD);
-            free($OLDCWD);
-            $OLDCWD = buf;
+            chdir(OLDCWD);
+            free(OLDCWD);
+            OLDCWD = buf;
+            std::cout << buf << '/n';
         }
 	    else if (chdir(path) < 0)
         {
             illegal_cmd = TRUE;
-            cmdString = path + " - path not found"
+            std::string str = " - path not found";
+            const char* c = str.c_str();
+            cmdString = strcat(cmdString,c);
         }
+
+
+
+
 
 	} 
 	
@@ -75,8 +127,8 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 			while (!getcwd(buf,size))
 			{
 				size = size+10;
-                free(buf)
-                buf = (void*)malloc(size);
+                free(buf);
+                buf = static_cast<char *>((void *) malloc(size));
 			}
 
 			printf(buf);
@@ -97,7 +149,7 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 	
 	else if (!strcmp(cmd, "jobs")) 
 	{
- 		
+
 	}
 	/*************************************************/
 	else if (!strcmp(cmd, "showpid")) 
@@ -122,7 +174,12 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString)
 	/*************************************************/
     else if (!strcmp(cmd, "history"))
     {
-
+        std::queue<char*> copy;
+        copy=test->getqueue();
+        while(!copy.empty()){
+            std::cout << copy.front() << '\n';
+            copy.pop();
+        }
 
 
     }

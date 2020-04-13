@@ -6,13 +6,15 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
+#include <iostream>
+#include <deque>
 #include <sys/types.h>
 #include <sys/wait.h>
 #define MAX_LINE_SIZE 80
 #define MAX_ARG 20
-char *$OLDCWD;
-typedef enum { FALSE , TRUE } bool;
-#define MAX_HISTORY
+#define MAX_HISTORY 50
+
+
 typedef enum { FALSE , TRUE } boolean;
 int ExeComp(char* lineSize);
 int BgCmd(char* lineSize, void* jobs);

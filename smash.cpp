@@ -10,9 +10,10 @@ main file. This file contains the main function of smash
 #include <signal.h>
 #include "commands.h"
 #include "signals.h"
+#include<queue>
 
 #define MAX_LINE_SIZE 80
-#define MAXARGS 20
+
 
 
 
@@ -25,10 +26,10 @@ char lineSize[MAX_LINE_SIZE];
 //**************************************************************************************
 int main(int argc, char *argv[])
 {
-
+    std::queue<char*> hist;
     char cmdString[MAX_LINE_SIZE]; 	   
 
-	
+
 	//signal declaretions
 	//NOTE: the signal handlers and the function/s that sets the handler should be found in siganls.c
 	 /* add your code here */
@@ -43,10 +44,6 @@ int main(int argc, char *argv[])
 	/************************************/
 	// Init globals
 
-    for (int i=0; i < MAX_HISTORY ; i++) {
-    hist[i] = NULL;
-    }
-
 	L_Fg_Cmd =(char*)malloc(sizeof(char)*(MAX_LINE_SIZE+1));
 	if (L_Fg_Cmd == NULL) 
 			exit (-1); 
@@ -60,6 +57,7 @@ int main(int argc, char *argv[])
 		fgets(lineSize, MAX_LINE_SIZE, stdin); // reads a line from the input stdin to lineSize
 		strcpy(cmdString, lineSize);    	// copies the line to cmdString
 		cmdString[strlen(lineSize)-1]='\0';
+
 					// perform a complicated Command
 		if(!ExeComp(lineSize)) continue;   // a function in commands.c executes a complicated command
 					// background command	
